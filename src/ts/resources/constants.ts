@@ -1,4 +1,5 @@
 import { LatLngExpression } from "leaflet";
+import { PoCConfig } from "../components/poc/Poc";
 
 export const MAP_ID = "map";
 
@@ -25,3 +26,18 @@ export const POPUP_DEFAULT_LAT = 51.0009333;
 export const POPUP_DEFAULT_LNG = 3.7063573;
 
 /* --- Constants regarding the Leaflet PoC -------------------------------------------------------------------------- */
+
+export const API_LAT = "{lat}";
+export const API_LNG = "{lng}";
+export const API_QUERY = "{query}";
+
+export const examplePropsPoc: PoCConfig = {
+    mapOptions: {
+        center: {
+            lat: DEFAULT_LAT,
+            lng: DEFAULT_LNG,
+        },
+        zoom: DEFAULT_ZOOM,
+    },
+    locations: [],
+};
