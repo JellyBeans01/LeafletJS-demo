@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noEmit": true,
+    "target": "esnext",
+    "jsx": "preserve",
+    "strict": true,
+    "types": [
+      "node",
+      "express",
+      "jest"
+    ],
+    "module": "esnext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": ["/node_modules"]
+}
