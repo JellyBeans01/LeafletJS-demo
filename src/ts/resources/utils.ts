@@ -1,4 +1,5 @@
 import Leaflet, { Marker } from "leaflet";
+import { Position } from "geojson";
 import { Location, LocationResult } from "../types";
 
 export const convertLocationToMarker = (location: Location): Marker => {
@@ -31,4 +32,9 @@ export const mapLocationResultToLocation = (locationResult: LocationResult): Loc
         lat: locationResult.Location.Lat_WGS84,
         lng: locationResult.Location.Lon_WGS84,
     },
+});
+
+export const createLinestringGeoJson = (coordinates: Position[]): GeoJSON.LineString => ({
+    type: "LineString",
+    coordinates,
 });

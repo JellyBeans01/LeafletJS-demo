@@ -5,6 +5,7 @@ import Map from "./Map";
 import GeocoderAddress from "./GeocoderAddress";
 import useMarkers from "../hooks/useMarkers";
 import { findLocationByLatLng } from "../../resources/geocoder";
+import { linestringCoordinates } from "../../resources/constants";
 
 export type PoCConfig = {
     mapOptions: {
@@ -47,7 +48,12 @@ const Poc: FC<PoCConfig> = (props) => {
 
     return (
         <>
-            <Map mapOptions={mapOptions} markers={markers} onPositionClicked={addMarkerOnClickMap} />
+            <Map
+                mapOptions={mapOptions}
+                markers={markers}
+                lineStringCoordinates={linestringCoordinates}
+                onPositionClicked={addMarkerOnClickMap}
+            />
             {error && <span style={{ color: "red" }}>{error}</span>}
             <GeocoderAddress onLocationFound={addMarker} />
         </>

@@ -1,14 +1,17 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import Leaflet, { LatLng, Marker } from "leaflet";
+import Leaflet, { geoJSON, LatLng, Marker } from "leaflet";
+import { Position } from "geojson";
 import { MAP_ID } from "../../resources/constants";
 import { PoCConfig } from "./Poc";
+import { createLinestringGeoJson } from "../../resources/utils";
 
 type PropsType = Omit<PoCConfig, "locations"> & {
     markers: Marker[];
+    lineStringCoordinates?: Position[];
     onPositionClicked?: (coordinates: LatLng) => void;
 };
 const Map: FC<PropsType> = (props) => {
-    const { mapOptions, markers, onPositionClicked } = props;
+    const { mapOptions, markers, lineStringCoordinates, onPositionClicked } = props;
 
     const [leafletMap, setLeafletMap] = useState<Leaflet.Map | null>(null);
 
@@ -24,11 +27,13 @@ const Map: FC<PropsType> = (props) => {
                 Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                     attribution: "© OpenStreetMap",
                 }),
-            );
+            )
+            .addLayer(geoJSON(createLinestringGeoJson(lineStringCoordinates || [])));
 
         addMarkersToMap(markers, map); // Add initial markers
         setLeafletMap(map);
 
+        // Listeners
         map.on("click", (evt) => onPositionClicked?.(evt.latlng));
 
         return () => {
