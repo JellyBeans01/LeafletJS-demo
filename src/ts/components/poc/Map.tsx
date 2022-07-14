@@ -1,13 +1,14 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import Leaflet, { Marker } from "leaflet";
+import Leaflet, { LatLng, Marker } from "leaflet";
 import { MAP_ID } from "../../resources/constants";
 import { PoCConfig } from "./Poc";
 
 type PropsType = Omit<PoCConfig, "locations"> & {
     markers: Marker[];
+    onPositionClicked?: (coordinates: LatLng) => void;
 };
 const Map: FC<PropsType> = (props) => {
-    const { mapOptions, markers } = props;
+    const { mapOptions, markers, onPositionClicked } = props;
 
     const [leafletMap, setLeafletMap] = useState<Leaflet.Map | null>(null);
 
@@ -27,6 +28,8 @@ const Map: FC<PropsType> = (props) => {
 
         addMarkersToMap(markers, map); // Add initial markers
         setLeafletMap(map);
+
+        map.on("click", (evt) => onPositionClicked?.(evt.latlng));
 
         return () => {
             map.off();

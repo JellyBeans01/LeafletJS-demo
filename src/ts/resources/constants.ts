@@ -38,6 +38,9 @@ export const examplePropsPoc: PoCConfig = {
             lng: DEFAULT_LNG,
         },
         zoom: DEFAULT_ZOOM,
+        opts: {
+            addMarkerOnClick: true,
+        },
     },
     locations: [],
 };

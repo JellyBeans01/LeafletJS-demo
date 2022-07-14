@@ -1,14 +1,11 @@
 import { FC, FormEvent, useState } from "react";
-import axios from "axios";
-import { GeocoderResponse, Location } from "../../types";
-import endpoints from "../../resources/endpoints";
-import { API_LAT, API_LNG, API_QUERY } from "../../resources/constants";
-import { locationResultMissesInformation, mapLocationResultToLocation } from "../../resources/utils";
+import { Location } from "../../types";
+import { findLocationByAddress } from "../../resources/geocoder";
 
 type PropsType = {
     onLocationFound: (location: Location) => void;
 };
-const Geocoder: FC<PropsType> = (props) => {
+const GeocoderAddress: FC<PropsType> = (props) => {
     const { onLocationFound } = props;
 
     const [address, setAddress] = useState<string>("");
@@ -23,35 +20,15 @@ const Geocoder: FC<PropsType> = (props) => {
             if (error) setError(null);
             setIsLoading(true);
 
-            const query = encodeURI(address);
-            const { data } = await axios.get<GeocoderResponse>(endpoints.geocoder.query.replace(API_QUERY, query));
-            if (!data.LocationResult.length) {
-                setError("Address could not be found...");
+            const location = await findLocationByAddress(address);
+            if (!location) {
+                setError("Could not find your location");
                 return;
-            }
-
-            let locationResult = data.LocationResult[0];
-
-            if (locationResultMissesInformation(locationResult)) {
-                const lat = locationResult.Location.Lat_WGS84;
-                const lng = locationResult.Location.Lon_WGS84;
-
-                const { data: updatedData } = await axios.get<GeocoderResponse>(
-                    endpoints.geocoder.latLng.replace(API_LAT, `${lat}`).replace(API_LNG, `${lng}`),
-                );
-
-                if (!updatedData.LocationResult.length) {
-                    setError("Address could not be found...");
-                    return;
-                }
-
-                // eslint-disable-next-line prefer-destructuring
-                locationResult = updatedData.LocationResult[0];
             }
 
             setAddress("");
             setError(null);
-            onLocationFound(mapLocationResultToLocation(locationResult));
+            onLocationFound(location);
         } catch (err) {
             // eslint-disable-next-line no-console
             console.error(err);
@@ -84,4 +61,4 @@ const Geocoder: FC<PropsType> = (props) => {
     );
 };
 
-export default Geocoder;
+export default GeocoderAddress;

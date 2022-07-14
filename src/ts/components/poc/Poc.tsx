@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Location, UseMarkersParamsType } from "../../types";
 import Map from "./Map";
-import Geocoder from "./Geocoder";
+import GeocoderAddress from "./GeocoderAddress";
 import useMarkers from "../hooks/useMarkers";
 
 export type PoCConfig = {
@@ -11,6 +11,9 @@ export type PoCConfig = {
             lng: number;
         };
         zoom: number;
+        opts?: {
+            addMarkerOnClick?: boolean;
+        };
     };
     locations: Location[];
 };
@@ -27,7 +30,7 @@ const Poc: FC<PoCConfig> = (props) => {
     return (
         <>
             <Map mapOptions={mapOptions} markers={markers} />
-            <Geocoder onLocationFound={addMarker} />
+            <GeocoderAddress onLocationFound={addMarker} />
         </>
     );
 };
