@@ -1,7 +1,7 @@
 import { Marker } from "leaflet";
 import { useMemo, useState } from "react";
-import { Location, UseMarkersParamsType } from "../../types";
-import { convertLocationToMarker } from "../../resources/utils";
+import { Location, UseMarkersParamsType } from "../types";
+import { convertLocationToMarker } from "../resources/utils";
 
 type UseMarkersReturnType = {
     markers: Marker[];

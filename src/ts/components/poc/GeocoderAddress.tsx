@@ -2,9 +2,7 @@ import { FC, FormEvent, useState } from "react";
 import { Location } from "../../types";
 import { findLocationByAddress } from "../../resources/geocoder";
 
-type PropsType = {
-    onLocationFound: (location: Location) => void;
-};
+type PropsType = { onLocationFound: (location: Location) => void };
 const GeocoderAddress: FC<PropsType> = (props) => {
     const { onLocationFound } = props;
 

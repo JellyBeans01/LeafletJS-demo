@@ -3,6 +3,12 @@ export enum Apps {
     PoC = "poc",
 }
 
+export enum MarkerColor {
+    Green = "green",
+    Red = "red",
+    Orange = "orange",
+}
+
 export type UseMarkersParamsType = {
     locations: Location[];
 };
@@ -35,4 +41,5 @@ export type Location = {
         lat: number;
         lng: number;
     };
+    type: MarkerColor;
 };

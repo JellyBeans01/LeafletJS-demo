@@ -6,10 +6,9 @@ import { locationResultMissesInformation, mapLocationResultToLocation } from "./
 
 export const findLocationByLatLng = async (lat: number, lng: number): Promise<Location | null> => {
     try {
-        const { data } = await axios.get<GeocoderResponse>(
-            endpoints.geocoder.latLng.replace(API_LAT, `${lat}`).replace(API_LNG, `${lng}`),
-        );
+        const endpoint = endpoints.geocoder.latLng.replace(API_LAT, `${lat}`).replace(API_LNG, `${lng}`);
 
+        const { data } = await axios.get<GeocoderResponse>(endpoint);
         if (!data.LocationResult.length) return null;
 
         return mapLocationResultToLocation(data.LocationResult[0]);
@@ -23,7 +22,9 @@ export const findLocationByLatLng = async (lat: number, lng: number): Promise<Lo
 export const findLocationByAddress = async (address: string): Promise<Location | null> => {
     try {
         const query = encodeURI(address);
-        const { data } = await axios.get<GeocoderResponse>(endpoints.geocoder.query.replace(API_QUERY, query));
+        const endpoint = endpoints.geocoder.query.replace(API_QUERY, query);
+
+        const { data } = await axios.get<GeocoderResponse>(endpoint);
         if (!data.LocationResult.length) return null;
 
         const locationResult = data.LocationResult[0];

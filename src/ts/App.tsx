@@ -3,7 +3,7 @@ import "../css/App.css";
 import { Apps } from "./types";
 import GuideMap from "./components/GuideMap";
 import Poc from "./components/poc/Poc";
-import { examplePropsPoc } from "./resources/constants";
+import { POC_EXAMPLE_PROPS } from "./resources/constants";
 
 const App: FC = () => {
     const [app, setApp] = useState<Apps | null>(null);
@@ -13,7 +13,7 @@ const App: FC = () => {
             {app ? (
                 <>
                     {app === Apps.Guide && <GuideMap />}
-                    {app === Apps.PoC && <Poc {...examplePropsPoc} />}
+                    {app === Apps.PoC && <Poc {...POC_EXAMPLE_PROPS} />}
                     <button type="button" style={{ marginTop: 50 }} onClick={() => setApp(null)}>
                         Back
                     </button>

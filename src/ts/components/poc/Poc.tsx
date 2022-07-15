@@ -3,9 +3,9 @@ import { LatLng } from "leaflet";
 import { Location, UseMarkersParamsType } from "../../types";
 import Map from "./Map";
 import GeocoderAddress from "./GeocoderAddress";
-import useMarkers from "../hooks/useMarkers";
+import useMarkers from "../../hooks/useMarkers";
 import { findLocationByLatLng } from "../../resources/geocoder";
-import { linestringCoordinates } from "../../resources/constants";
+import { GEO_JSON_COORDINATES } from "../../resources/constants";
 
 export type PoCConfig = {
     mapOptions: {
@@ -51,7 +51,7 @@ const Poc: FC<PoCConfig> = (props) => {
             <Map
                 mapOptions={mapOptions}
                 markers={markers}
-                lineStringCoordinates={linestringCoordinates}
+                multiPolygonCoordinates={GEO_JSON_COORDINATES}
                 onPositionClicked={addMarkerOnClickMap}
             />
             {error && <span style={{ color: "red" }}>{error}</span>}
