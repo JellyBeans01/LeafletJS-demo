@@ -1,6 +1,6 @@
 import Leaflet, { Marker, Icon } from "leaflet";
-import { Position } from "geojson";
-import { Location, LocationResult, MarkerColor } from "../types";
+import { Proj4GeoJSONFeature } from "proj4leaflet";
+import { Location, LocationResult, MarkerColor, GeoJsonObject } from "../types";
 
 export const convertLocationToMarker = (location: Location): Marker => {
     const { address, coordinates, type } = location;
@@ -44,14 +44,14 @@ export const mapLocationResultToLocation = (locationResult: LocationResult): Loc
     type: generateRandomMarkerColor(),
 });
 
-export const createLinestringGeoJson = (coordinates: Position[]): GeoJSON.LineString => ({
-    type: "LineString",
+export const createLinestringGeoJson = (coordinates: [number, number][]): LineString => ({
+    type: GeoJsonObject.LineString,
     coordinates,
 });
 
-export const createMultiPolygonGeoJson = (coordinates: Position[]): GeoJSON.MultiPolygon => ({
-    type: "MultiPolygon",
-    coordinates: [[coordinates]],
+export const createMultiPolygonGeoJson = (coordinates: [number, number][][][]): MultiPolygon => ({
+    type: GeoJsonObject.MultiPolygon,
+    coordinates,
 });
 
 export const generateLeafIcon = (iconColor: MarkerColor): Icon => {
@@ -65,3 +65,13 @@ export const generateLeafIcon = (iconColor: MarkerColor): Icon => {
         popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
     });
 };
+
+export const generateLineStringGeoJson = (lineString: LineString): Proj4GeoJSONFeature => ({
+    type: "Feature",
+    crs: {
+        type: "name",
+        properties: { name: "urn:ogc:def:crs:EPSG::31370" },
+    },
+    geometry: lineString,
+    properties: {},
+});

@@ -1,13 +1,4 @@
-export enum Apps {
-    Guide = "guide",
-    PoC = "poc",
-}
-
-export enum MarkerColor {
-    Green = "green",
-    Red = "red",
-    Orange = "orange",
-}
+import { MarkerColor } from "./enums";
 
 export type UseMarkersParamsType = {
     locations: Location[];
@@ -43,3 +34,5 @@ export type Location = {
     };
     type: MarkerColor;
 };
+
+export * from "./enums";

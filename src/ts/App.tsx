@@ -3,6 +3,7 @@ import "../css/App.css";
 import { Apps } from "./types";
 import GuideMap from "./components/GuideMap";
 import Poc from "./components/poc/Poc";
+import MultiPolygon from "./components/multi-polygon/MultiPolygon";
 import { POC_EXAMPLE_PROPS } from "./resources/constants";
 
 const App: FC = () => {
@@ -14,6 +15,7 @@ const App: FC = () => {
                 <>
                     {app === Apps.Guide && <GuideMap />}
                     {app === Apps.PoC && <Poc {...POC_EXAMPLE_PROPS} />}
+                    {app === Apps.MultiPolygonTest && <MultiPolygon />}
                     <button type="button" style={{ marginTop: 50 }} onClick={() => setApp(null)}>
                         Back
                     </button>
@@ -27,6 +29,9 @@ const App: FC = () => {
                         </button>
                         <button type="button" onClick={() => setApp(Apps.PoC)}>
                             PoC
+                        </button>
+                        <button type="button" onClick={() => setApp(Apps.MultiPolygonTest)}>
+                            MultiPolygon test
                         </button>
                     </div>
                 </div>

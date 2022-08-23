@@ -24,7 +24,8 @@
     "strictPropertyInitialization": false
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "global.d.ts",
   ],
   "exclude": ["/node_modules"]
 }

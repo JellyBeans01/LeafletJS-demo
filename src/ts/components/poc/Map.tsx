@@ -1,18 +1,17 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Leaflet, { geoJSON, LatLng, Marker } from "leaflet";
-import { Position } from "geojson";
 import { MAP_ID } from "../../resources/constants";
 import { PoCConfig } from "./Poc";
-import { createLinestringGeoJson, createMultiPolygonGeoJson } from "../../resources/utils";
+import { createLinestringGeoJson } from "../../resources/utils";
 
 type PropsType = Omit<PoCConfig, "locations"> & {
     markers: Marker[];
-    lineStringCoordinates?: Position[];
-    multiPolygonCoordinates?: Position[];
+    lineStringCoordinates?: [number, number][];
+    multiPolygonCoordinates?: [number, number][];
     onPositionClicked?: (coordinates: LatLng) => void;
 };
 const Map: FC<PropsType> = (props) => {
-    const { mapOptions, markers, lineStringCoordinates, multiPolygonCoordinates, onPositionClicked } = props;
+    const { mapOptions, markers, lineStringCoordinates, onPositionClicked } = props;
 
     const [leafletMap, setLeafletMap] = useState<Leaflet.Map | null>(null);
 
@@ -29,8 +28,7 @@ const Map: FC<PropsType> = (props) => {
                     attribution: "© OpenStreetMap",
                 }),
             )
-            .addLayer(geoJSON(createLinestringGeoJson(lineStringCoordinates || [])))
-            .addLayer(geoJSON(createMultiPolygonGeoJson(multiPolygonCoordinates || [])));
+            .addLayer(geoJSON(createLinestringGeoJson(lineStringCoordinates || [])));
 
         addMarkersToMap(markers, map); // Add initial markers
         setLeafletMap(map);
