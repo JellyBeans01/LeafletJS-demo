@@ -6,6 +6,7 @@ import { EPSG31370, LINESTRING, MAP_ID, POLYGON, TRAIN_STATIONS } from "../../re
 import { generateGeoJson, mapTrainStationToLocation } from "../../resources/utils";
 import useMarkers from "../../hooks/useMarkers";
 import { Location, TrainStation } from "../../types";
+import ScreenShotControl from "../../controls/ScreenShotControl";
 
 const MultiPolygon: FC = () => {
     const { polygon, lineString, locations } = useMemo(() => {
@@ -46,6 +47,8 @@ const MultiPolygon: FC = () => {
         Leaflet.Proj.geoJson(generateGeoJson(polygon)).addTo(map);
 
         markers.forEach((marker) => marker.addTo(map));
+
+        map.addControl(new ScreenShotControl());
 
         return () => {
             map.off();
