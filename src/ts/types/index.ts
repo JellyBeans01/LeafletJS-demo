@@ -35,4 +35,11 @@ export type Location = {
     type: MarkerColor;
 };
 
+export type Station = {
+    id: number;
+    name: string;
+    latitude: string;
+    longitude: string;
+};
+
 export * from "./enums";

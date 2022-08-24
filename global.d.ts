@@ -25,6 +25,8 @@ type MultiPolygon = {
     coordinates: [number, number][][][];
 };
 
+type Geometry = LineString | Polygon | MultiPolygon;
+
 declare namespace wicket {
     class Wkt {
         declare delimiter: string;
@@ -39,7 +41,7 @@ declare namespace wicket {
         declare read: (geoString: string) => void;
         declare write: () => string;
         declare merge: (wkt: Wkt) => void;
-        declare toJson: () => LineString | Polygon | MultiPolygon;
+        declare toJson: () => Geometry;
     }
 }
 

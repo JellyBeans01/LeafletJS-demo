@@ -3,7 +3,7 @@ import Leaflet from "leaflet";
 import "proj4leaflet";
 import wicket from "wicket";
 import { DEFAULT_LAT, DEFAULT_LNG, EPSG31370, LINESTRING, MAP_ID, POLYGON } from "../../resources/constants";
-import { generateLineStringGeoJson } from "../../resources/utils";
+import { generateGeoJson } from "../../resources/utils";
 
 const MultiPolygon: FC = () => {
     const { polygon, lineString } = useMemo(() => {
@@ -11,9 +11,6 @@ const MultiPolygon: FC = () => {
     }, []);
 
     useEffect(() => {
-        console.count("render");
-        console.log(polygon, lineString);
-
         const projection = {
             epsg: "EPSG:31370",
             def: EPSG31370,
@@ -28,16 +25,18 @@ const MultiPolygon: FC = () => {
         const crs = new Leaflet.Proj.CRS(projection.epsg, projection.def, { resolutions: projection.resolutions });
 
         const map = Leaflet.map(MAP_ID, { crs })
-            .setView([DEFAULT_LAT, DEFAULT_LNG], 12)
+            .setView([DEFAULT_LAT, DEFAULT_LNG], 4)
             .addLayer(
-                Leaflet.tileLayer.wms("https://geoservices.informatievlaanderen.be/raadpleegdiensten/histcart/wms", {
-                    format: "image/png",
-                    attribution: "Source: GIS Geoservices Informatie Vlaanderen",
+                Leaflet.tileLayer.wms("http://ows.mundialis.de/services/service?", {
+                    layers: "OSM-WMS", // Other layers: https://leafletjs.com/examples/wms/wms.html
+                    attribution: "Mundalis: https://www.mundialis.de/en/",
+                    crs: Leaflet.CRS.EPSG3857,
                 }),
             );
 
         try {
-            Leaflet.Proj.geoJson(generateLineStringGeoJson(lineString as LineString)).addTo(map);
+            Leaflet.Proj.geoJson(generateGeoJson(lineString), { style: { color: "red" } }).addTo(map);
+            Leaflet.Proj.geoJson(generateGeoJson(polygon)).addTo(map);
         } catch (e) {
             console.error(e);
         }

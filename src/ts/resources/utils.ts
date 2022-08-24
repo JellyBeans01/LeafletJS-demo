@@ -66,12 +66,12 @@ export const generateLeafIcon = (iconColor: MarkerColor): Icon => {
     });
 };
 
-export const generateLineStringGeoJson = (lineString: LineString): Proj4GeoJSONFeature => ({
+export const generateGeoJson = (geometry: Geometry): Proj4GeoJSONFeature => ({
     type: "Feature",
     crs: {
         type: "name",
         properties: { name: "urn:ogc:def:crs:EPSG::31370" },
     },
-    geometry: lineString,
+    geometry,
     properties: {},
 });
