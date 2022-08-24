@@ -2,13 +2,21 @@ import { FC, useEffect, useMemo } from "react";
 import Leaflet from "leaflet";
 import "proj4leaflet";
 import wicket from "wicket";
-import { DEFAULT_LAT, DEFAULT_LNG, EPSG31370, LINESTRING, MAP_ID, POLYGON } from "../../resources/constants";
-import { generateGeoJson } from "../../resources/utils";
+import { EPSG31370, LINESTRING, MAP_ID, POLYGON, TRAIN_STATIONS } from "../../resources/constants";
+import { generateGeoJson, mapTrainStationToLocation } from "../../resources/utils";
+import useMarkers from "../../hooks/useMarkers";
+import { Location, TrainStation } from "../../types";
 
 const MultiPolygon: FC = () => {
-    const { polygon, lineString } = useMemo(() => {
-        return { polygon: new wicket.Wkt(POLYGON).toJson(), lineString: new wicket.Wkt(LINESTRING).toJson() };
+    const { polygon, lineString, locations } = useMemo(() => {
+        return {
+            polygon: new wicket.Wkt(POLYGON).toJson(),
+            lineString: new wicket.Wkt(LINESTRING).toJson(),
+            locations: TRAIN_STATIONS.map<Location<TrainStation>>(mapTrainStationToLocation),
+        };
     }, []);
+
+    const { markers } = useMarkers({ locations });
 
     useEffect(() => {
         const projection = {
@@ -25,27 +33,23 @@ const MultiPolygon: FC = () => {
         const crs = new Leaflet.Proj.CRS(projection.epsg, projection.def, { resolutions: projection.resolutions });
 
         const map = Leaflet.map(MAP_ID, { crs })
-            .setView([DEFAULT_LAT, DEFAULT_LNG], 4)
+            .setView([50.719841, 4.204606], 8)
             .addLayer(
-                Leaflet.tileLayer.wms("http://ows.mundialis.de/services/service?", {
+                Leaflet.tileLayer.wms("https://ows.mundialis.de/services/service?", {
                     layers: "OSM-WMS", // Other layers: https://leafletjs.com/examples/wms/wms.html
                     attribution: "Mundalis: https://www.mundialis.de/en/",
                     crs: Leaflet.CRS.EPSG3857,
                 }),
             );
 
-        try {
-            Leaflet.Proj.geoJson(generateGeoJson(lineString), { style: { color: "red" } }).addTo(map);
-            Leaflet.Proj.geoJson(generateGeoJson(polygon)).addTo(map);
-        } catch (e) {
-            console.error(e);
-        }
+        Leaflet.Proj.geoJson(generateGeoJson(lineString), { style: { color: "red" } }).addTo(map);
+        Leaflet.Proj.geoJson(generateGeoJson(polygon)).addTo(map);
+
+        markers.forEach((marker) => marker.addTo(map));
 
         return () => {
             map.off();
             map.remove();
-
-            console.log("cleanup");
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

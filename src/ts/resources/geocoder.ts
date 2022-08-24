@@ -1,10 +1,10 @@
 import axios from "axios";
-import { GeocoderResponse, Location } from "../types";
+import { Address, GeocoderResponse, Location } from "../types";
 import endpoints from "./endpoints";
 import { API_LAT, API_LNG, API_QUERY } from "./constants";
 import { locationResultMissesInformation, mapLocationResultToLocation } from "./utils";
 
-export const findLocationByLatLng = async (lat: number, lng: number): Promise<Location | null> => {
+export const findLocationByLatLng = async (lat: number, lng: number): Promise<Location<Address> | null> => {
     try {
         const endpoint = endpoints.geocoder.latLng.replace(API_LAT, `${lat}`).replace(API_LNG, `${lng}`);
 
@@ -19,7 +19,7 @@ export const findLocationByLatLng = async (lat: number, lng: number): Promise<Lo
     }
 };
 
-export const findLocationByAddress = async (address: string): Promise<Location | null> => {
+export const findLocationByAddress = async (address: string): Promise<Location<Address> | null> => {
     try {
         const query = encodeURI(address);
         const endpoint = endpoints.geocoder.query.replace(API_QUERY, query);

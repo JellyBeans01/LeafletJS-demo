@@ -1,20 +1,17 @@
 import Leaflet, { Marker, Icon } from "leaflet";
 import { Proj4GeoJSONFeature } from "proj4leaflet";
-import { Location, LocationResult, MarkerColor, GeoJsonObject } from "../types";
+import { Location, LocationResult, MarkerColor, GeoJsonObject, Address, TrainStation } from "../types";
 
-export const convertLocationToMarker = (location: Location): Marker => {
-    const { address, coordinates, type } = location;
-    const { city, houseNumber, street, zip } = address;
+export const convertLocationToMarker = <T>(location: Location<T>): Marker => {
+    const { popupContent, coordinates, type } = location;
     const { lat, lng } = coordinates;
 
-    const html = `
-        <p>${street} ${houseNumber}</p>
-        <p>${zip} ${city}</p>
-    `;
-
     const icon = generateLeafIcon(type);
+    const marker = Leaflet.marker([lat, lng]).setIcon(icon);
 
-    return Leaflet.marker([lat, lng]).setIcon(icon).bindPopup(html);
+    if (popupContent) marker.bindPopup(popupContent);
+
+    return marker;
 };
 
 export const locationResultMissesInformation = (locationResult: LocationResult): boolean => {
@@ -29,28 +26,39 @@ export const generateRandomMarkerColor = (): MarkerColor => {
     return colors[index];
 };
 
-export const mapLocationResultToLocation = (locationResult: LocationResult): Location => ({
-    address: {
-        city: locationResult.Municipality || "",
-        houseNumber: locationResult.Housenumber || "",
-        id: locationResult.ID,
-        street: locationResult.Thoroughfarename || "",
-        zip: locationResult.Zipcode || "",
-    },
+export const mapLocationResultToLocation = (locationResult: LocationResult): Location<Address> => ({
+    type: generateRandomMarkerColor(),
     coordinates: {
         lat: locationResult.Location.Lat_WGS84,
         lng: locationResult.Location.Lon_WGS84,
     },
+    popupContent: `
+        <p>${locationResult.Thoroughfarename} ${locationResult.Housenumber}</p>
+        <p>${locationResult.Zipcode} ${locationResult.Municipality}</p>
+    `,
+    data: {
+        address: {
+            city: locationResult.Municipality || "",
+            houseNumber: locationResult.Housenumber || "",
+            id: locationResult.ID,
+            street: locationResult.Thoroughfarename || "",
+            zip: locationResult.Zipcode || "",
+        },
+    },
+});
+
+export const mapTrainStationToLocation = (trainStation: TrainStation): Location<TrainStation> => ({
     type: generateRandomMarkerColor(),
+    coordinates: {
+        lat: +trainStation.latitude,
+        lng: +trainStation.longitude,
+    },
+    popupContent: `<p>${trainStation.name}</p>`,
+    data: trainStation,
 });
 
 export const createLinestringGeoJson = (coordinates: [number, number][]): LineString => ({
     type: GeoJsonObject.LineString,
-    coordinates,
-});
-
-export const createMultiPolygonGeoJson = (coordinates: [number, number][][][]): MultiPolygon => ({
-    type: GeoJsonObject.MultiPolygon,
     coordinates,
 });
 
@@ -74,4 +82,12 @@ export const generateGeoJson = (geometry: Geometry): Proj4GeoJSONFeature => ({
     },
     geometry,
     properties: {},
+});
+
+export const addProjection = (feature: Proj4GeoJSONFeature): Proj4GeoJSONFeature => ({
+    ...feature,
+    crs: {
+        type: "name",
+        properties: { name: "urn:ogc:def:crs:EPSG::31370" },
+    },
 });
