@@ -10,32 +10,39 @@ const App: FC = () => {
     const [app, setApp] = useState<Apps | null>(null);
 
     return (
-        <div className="App">
-            {app ? (
-                <>
-                    {app === Apps.Guide && <GuideMap />}
-                    {app === Apps.PoC && <Poc {...POC_EXAMPLE_PROPS} />}
-                    {app === Apps.MultiPolygonTest && <MultiPolygon />}
-                    <button type="button" style={{ marginTop: 50 }} onClick={() => setApp(null)}>
-                        Back
-                    </button>
-                </>
-            ) : (
-                <div className="App">
-                    <h1>Select app</h1>
-                    <div>
-                        <button type="button" onClick={() => setApp(Apps.Guide)}>
-                            Guide
+        <div className="root-container">
+            <div className="App">
+                {app ? (
+                    <>
+                        {app === Apps.Guide && <GuideMap />}
+                        {app === Apps.PoC && <Poc {...POC_EXAMPLE_PROPS} />}
+                        {app === Apps.MultiPolygonTest && <MultiPolygon />}
+                        <button type="button" onClick={() => setApp(null)}>
+                            Back
                         </button>
-                        <button type="button" onClick={() => setApp(Apps.PoC)}>
-                            PoC
-                        </button>
-                        <button type="button" onClick={() => setApp(Apps.MultiPolygonTest)}>
-                            MultiPolygon test
-                        </button>
+                    </>
+                ) : (
+                    <div className="App">
+                        <h1>Select app</h1>
+                        <div>
+                            <button type="button" onClick={() => setApp(Apps.Guide)}>
+                                Guide
+                            </button>
+                            <button type="button" onClick={() => setApp(Apps.PoC)}>
+                                PoC
+                            </button>
+                            <button type="button" onClick={() => setApp(Apps.MultiPolygonTest)}>
+                                MultiPolygon test
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
+            <footer style={{ textAlign: "center", fontSize: 12, padding: 5 }}>
+                <a href="https://www.flaticon.com/free-icons/screenshot" title="screenshot icons">
+                    Screenshot icons created by Uniconlabs - Flaticon
+                </a>
+            </footer>
         </div>
     );
 };

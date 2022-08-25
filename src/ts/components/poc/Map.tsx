@@ -49,7 +49,7 @@ const Map: FC<PropsType> = (props) => {
         addMarkersToMap(markers, leafletMap);
     }, [markers]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return useMemo(() => <div id={MAP_ID} style={{ height: "50vh" }} />, [markers]); // eslint-disable-line react-hooks/exhaustive-deps
+    return useMemo(() => <div id={MAP_ID} style={{ height: "75vh" }} />, [markers]); // eslint-disable-line react-hooks/exhaustive-deps
 };
 
 export default Map;

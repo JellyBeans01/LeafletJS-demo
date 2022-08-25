@@ -1,5 +1,13 @@
+.root-container {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
 .App {
   text-align: center;
+  flex: 1;
 }
 
 .App-logo {
@@ -26,6 +34,11 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.img {
+  display: block;
+  margin: auto;
 }
 
 @keyframes App-logo-spin {

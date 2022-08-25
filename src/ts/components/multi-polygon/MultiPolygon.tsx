@@ -31,6 +31,7 @@ const MultiPolygon: FC = () => {
             ],
         };
 
+        // Create the projection in EPSG:31370 so that the polygons can be applied correctly without transforming them all individually
         const crs = new Leaflet.Proj.CRS(projection.epsg, projection.def, { resolutions: projection.resolutions });
 
         const map = Leaflet.map(MAP_ID, { crs })
@@ -39,13 +40,15 @@ const MultiPolygon: FC = () => {
                 Leaflet.tileLayer.wms("https://ows.mundialis.de/services/service?", {
                     layers: "OSM-WMS", // Other layers: https://leafletjs.com/examples/wms/wms.html
                     attribution: "Mundalis: https://www.mundialis.de/en/",
-                    crs: Leaflet.CRS.EPSG3857,
+                    crs: Leaflet.CRS.EPSG3857, // Use the default EPSG:3857 projection used by Leaflet, so the map tiles will be fetched correctly
                 }),
             );
 
+        // Since out polygons use projected coordinates, we need to project them on our map as well
         Leaflet.Proj.geoJson(generateGeoJson(lineString), { style: { color: "red" } }).addTo(map);
         Leaflet.Proj.geoJson(generateGeoJson(polygon)).addTo(map);
 
+        // We can add normal coordinates directly to our map, without the need of projecting them
         markers.forEach((marker) => marker.addTo(map));
 
         map.addControl(new ScreenShotControl());
