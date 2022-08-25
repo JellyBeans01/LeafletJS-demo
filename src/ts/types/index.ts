@@ -1,16 +1,17 @@
-export enum Apps {
-    Guide = "guide",
-    PoC = "poc",
-}
+import { MarkerColor } from "./enums";
 
-export enum MarkerColor {
-    Green = "green",
-    Red = "red",
-    Orange = "orange",
-}
+export type Address = {
+    address: {
+        id: number;
+        zip: string;
+        city: string;
+        street: string;
+        houseNumber: string;
+    };
+};
 
-export type UseMarkersParamsType = {
-    locations: Location[];
+export type UseMarkersParamsType<T> = {
+    locations: Location<T>[];
 };
 
 export type LocationResult = {
@@ -29,17 +30,21 @@ export type GeocoderResponse = {
     LocationResult: LocationResult[];
 };
 
-export type Location = {
-    address: {
-        id: number;
-        zip: string;
-        city: string;
-        street: string;
-        houseNumber: string;
-    };
+export type Location<T> = {
+    type: MarkerColor;
     coordinates: {
         lat: number;
         lng: number;
     };
-    type: MarkerColor;
+    popupContent?: string;
+    data: T;
 };
+
+export type TrainStation = {
+    id: number;
+    name: string;
+    latitude: string;
+    longitude: string;
+};
+
+export * from "./enums";

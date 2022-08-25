@@ -1,5 +1,13 @@
+.root-container {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
 .App {
   text-align: center;
+  flex: 1;
 }
 
 .App-logo {
@@ -26,6 +34,17 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.position-rel {
+  position: relative;
+}
+
+.img {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
 }
 
 @keyframes App-logo-spin {

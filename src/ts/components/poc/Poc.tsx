@@ -1,11 +1,10 @@
 import { FC, useState } from "react";
 import { LatLng } from "leaflet";
-import { Location, UseMarkersParamsType } from "../../types";
+import { Address, Location, UseMarkersParamsType } from "../../types";
 import Map from "./Map";
 import GeocoderAddress from "./GeocoderAddress";
 import useMarkers from "../../hooks/useMarkers";
 import { findLocationByLatLng } from "../../resources/geocoder";
-import { GEO_JSON_COORDINATES } from "../../resources/constants";
 
 export type PoCConfig = {
     mapOptions: {
@@ -15,14 +14,14 @@ export type PoCConfig = {
         };
         zoom: number;
     };
-    locations: Location[];
+    locations: Location<Address>[];
 };
 
 const Poc: FC<PoCConfig> = (props) => {
     const { locations, mapOptions } = props;
     const [error, setError] = useState<string | null>(null);
 
-    const params: UseMarkersParamsType = {
+    const params: UseMarkersParamsType<Address> = {
         locations,
     };
 
@@ -48,12 +47,7 @@ const Poc: FC<PoCConfig> = (props) => {
 
     return (
         <>
-            <Map
-                mapOptions={mapOptions}
-                markers={markers}
-                multiPolygonCoordinates={GEO_JSON_COORDINATES}
-                onPositionClicked={addMarkerOnClickMap}
-            />
+            <Map mapOptions={mapOptions} markers={markers} onPositionClicked={addMarkerOnClickMap} />
             {error && <span style={{ color: "red" }}>{error}</span>}
             <GeocoderAddress onLocationFound={addMarker} />
         </>

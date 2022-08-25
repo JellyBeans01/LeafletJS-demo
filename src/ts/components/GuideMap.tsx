@@ -66,7 +66,7 @@ const GuideMap: FC = () => {
         };
     }, []);
 
-    return <div id={MAP_ID} style={{ height: 600, width: "100vw", border: "1px solid black" }} />;
+    return <div id={MAP_ID} style={{ height: 600, width: "100vw" }} />;
 };
 
 export default GuideMap;
