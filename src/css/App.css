@@ -36,9 +36,15 @@
   color: #61dafb;
 }
 
+.position-rel {
+  position: relative;
+}
+
 .img {
-  display: block;
-  margin: auto;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
 }
 
 @keyframes App-logo-spin {

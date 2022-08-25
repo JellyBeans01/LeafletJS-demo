@@ -6,10 +6,11 @@ const ScreenShotControl = Leaflet.Control.extend({
     onAdd: () => {
         // Use DomUtil to let leaflet handle creation and placement itself
         const div = Leaflet.DomUtil.create("div", "leaflet-bar leaflet-control");
-        const button = Leaflet.DomUtil.create("a", "screenshot-img");
+        const button = Leaflet.DomUtil.create("a", "position-rel");
         const img = Leaflet.DomUtil.create("img", "img");
 
         img.src = "/icons/screenshot.png";
+        img.alt = "Screenshot map";
 
         button.href = "#";
         button.onclick = async () => {
