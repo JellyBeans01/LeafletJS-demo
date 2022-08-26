@@ -2,17 +2,28 @@ import { FC, useEffect, useMemo } from "react";
 import Leaflet from "leaflet";
 import "proj4leaflet";
 import wicket from "wicket";
-import { EPSG31370, LINESTRING, MAP_ID, POLYGON, TRAIN_STATIONS } from "../../resources/constants";
+import { EPSG31370, LINESTRING, MAP_ID, POLYGON, TRAIN_STATIONS, TRAVEL_TIMES } from "../../resources/constants";
 import { generateGeoJson, mapTrainStationToLocation } from "../../resources/utils";
 import useMarkers from "../../hooks/useMarkers";
-import { Location, TrainStation } from "../../types";
+import { Location, TrainStation, TravelTimeData } from "../../types";
 import ScreenShotControl from "../../controls/ScreenShotControl";
+import LayerControl from "../../controls/LayerControl";
 
 const MultiPolygon: FC = () => {
-    const { polygon, lineString, locations } = useMemo(() => {
+    const { polygon, lineString, travelTimData, locations } = useMemo(() => {
         return {
-            polygon: new wicket.Wkt(POLYGON).toJson(),
-            lineString: new wicket.Wkt(LINESTRING).toJson(),
+            polygon: generateGeoJson(new wicket.Wkt(POLYGON).toJson()),
+            lineString: generateGeoJson(new wicket.Wkt(LINESTRING).toJson()),
+            travelTimData: TRAVEL_TIMES.map<TravelTimeData | null>(({ type, geo, reistijd }) => {
+                const strippedProjection = geo.replace("SRID=31370;", "");
+                if (strippedProjection.includes("GEOMETRYCOLLECTION")) return null;
+
+                return {
+                    type,
+                    reistijd,
+                    geometry: generateGeoJson(new wicket.Wkt(strippedProjection).toJson()),
+                };
+            }).filter(Boolean) as TravelTimeData[],
             locations: TRAIN_STATIONS.map<Location<TrainStation>>(mapTrainStationToLocation),
         };
     }, []);
@@ -45,13 +56,14 @@ const MultiPolygon: FC = () => {
             );
 
         // Since out polygons use projected coordinates, we need to project them on our map as well
-        Leaflet.Proj.geoJson(generateGeoJson(lineString), { style: { color: "red" } }).addTo(map);
-        Leaflet.Proj.geoJson(generateGeoJson(polygon)).addTo(map);
+        Leaflet.Proj.geoJson(lineString, { style: { color: "red" } }).addTo(map);
+        Leaflet.Proj.geoJson(polygon).addTo(map);
 
         // We can add normal coordinates directly to our map, without the need of projecting them
         markers.forEach((marker) => marker.addTo(map));
 
         map.addControl(new ScreenShotControl());
+        map.addControl(LayerControl(map, travelTimData));
 
         return () => {
             map.off();

@@ -1,6 +1,6 @@
-import Leaflet, { Marker, Icon } from "leaflet";
+import Leaflet, { Marker, Icon, GeoJSONOptions } from "leaflet";
 import { Proj4GeoJSONFeature } from "proj4leaflet";
-import { Location, LocationResult, MarkerColor, GeoJsonObject, Address, TrainStation } from "../types";
+import { Location, LocationResult, MarkerColor, GeoJsonObject, Address, TrainStation, TravelType } from "../types";
 
 export const convertLocationToMarker = <T>(location: Location<T>): Marker => {
     const { popupContent, coordinates, type } = location;
@@ -84,10 +84,25 @@ export const generateGeoJson = (geometry: Geometry): Proj4GeoJSONFeature => ({
     properties: {},
 });
 
-export const addProjection = (feature: Proj4GeoJSONFeature): Proj4GeoJSONFeature => ({
-    ...feature,
-    crs: {
-        type: "name",
-        properties: { name: "urn:ogc:def:crs:EPSG::31370" },
-    },
-});
+export const getStyleForTravelType = (type: TravelType): GeoJSONOptions => {
+    // Thanks @ http://randomcolour.com/ :D
+    switch (type) {
+        case TravelType.Auto:
+            return { style: { color: "#6614fb" } };
+
+        case TravelType.EBike:
+            return { style: { color: "#a845ee" } };
+
+        case TravelType.Fiets:
+            return { style: { color: "#48c28a" } };
+
+        case TravelType.VrachtVerkeer:
+            return { style: { color: "#edbd2a" } };
+
+        case TravelType.Wandel:
+            return { style: { color: "#df5b75" } };
+
+        default:
+            return { style: { color: "#bdcc2f" } };
+    }
+};

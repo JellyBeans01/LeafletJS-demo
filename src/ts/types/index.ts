@@ -1,4 +1,5 @@
-import { MarkerColor } from "./enums";
+import { Proj4GeoJSONFeature } from "proj4leaflet";
+import { MarkerColor, TravelType } from "./enums";
 
 export type Address = {
     address: {
@@ -45,6 +46,18 @@ export type TrainStation = {
     name: string;
     latitude: string;
     longitude: string;
+};
+
+export type TravelTime = {
+    type: TravelType;
+    geo: string;
+    reistijd: number;
+};
+
+export type TravelTimeData = {
+    type: TravelType;
+    reistijd: number;
+    geometry: Proj4GeoJSONFeature;
 };
 
 export * from "./enums";

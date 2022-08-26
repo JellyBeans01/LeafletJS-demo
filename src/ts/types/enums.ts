@@ -20,3 +20,11 @@ export enum MarkerColor {
     Red = "red",
     Orange = "orange",
 }
+
+export enum TravelType {
+    Wandel = "wandel",
+    Auto = "auto",
+    Fiets = "fiets",
+    EBike = "e-bike",
+    VrachtVerkeer = "vrachtverkeer",
+}
