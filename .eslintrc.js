@@ -203,7 +203,6 @@ module.exports = {
         "consistent-return": "warn",
         "no-unused-vars": "off",
         "no-bitwise": 0,
-        "babel/quotes": 1,
         quotes: ["error", "double", { allowTemplateLiterals: true, avoidEscape: true }],
         "no-shadow": "off",
         "jsx-a11y/label-has-associated-control": "warn",
