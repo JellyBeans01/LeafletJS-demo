@@ -16,13 +16,14 @@ const MultiPolygon: FC = () => {
             polygon: generateGeoJson(new wicket.Wkt(POLYGON).toJson()),
             lineString: generateGeoJson(new wicket.Wkt(LINESTRING).toJson()),
             travelTimeData: TRAVEL_TIMES.map<TravelTimeData | null>(({ type, geo, reistijd }) => {
-                const strippedProjection = geo.replace("SRID=31370;", "");
-                if (strippedProjection.includes("GEOMETRYCOLLECTION")) return null;
+                const strippedData = geo.replace("SRID=31370;", "");
+                // GEOMETRYCOLLECTION is not yet supported...
+                if (strippedData.includes("GEOMETRYCOLLECTION")) return null;
 
                 return {
                     type,
                     reistijd,
-                    geometry: generateGeoJson(new wicket.Wkt(strippedProjection).toJson()),
+                    geometry: generateGeoJson(new wicket.Wkt(strippedData).toJson()),
                 };
             }).filter(Boolean) as TravelTimeData[],
             locations: TRAIN_STATIONS.map<Location<TrainStation>>(mapTrainStationToLocation),
@@ -42,11 +43,11 @@ const MultiPolygon: FC = () => {
 
         const map = Leaflet.map(MAP_ID).setView([50.716841, 4.204606], 15).addLayer(OSM);
 
-        // Since out polygons use projected coordinates, we need to project them on our map as well
+        // Since our polygons use projected coordinates, we need to project them on our map as well
         Leaflet.Proj.geoJson(lineString, { style: { color: "red", weight: 10 } }).addTo(map);
         Leaflet.Proj.geoJson(polygon).addTo(map);
 
-        // We can add normal coordinates directly to our map, without the need of projecting them
+        // We can add lat-lng coordinates directly to our map, without the need of projecting them
         markers.forEach((marker) => marker.addTo(map));
 
         map.addControl(new ScreenShotControl());
